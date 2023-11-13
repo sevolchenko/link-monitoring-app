@@ -1,0 +1,56 @@
+link-parser:
+  sources:
+    - name: GitHub Repositories
+      link-template: https://github.com/{owner}/{repository}
+      api:
+        host: https://api.github.com
+        headers:
+          Authorization: ${GITHUB_TOKEN} # TODO
+        paths:
+          - path: /repos/{owner}/{repository}
+            variables:
+              pushed_at: $.pushed_at
+            events:
+              - name: GITHUB_REPOSITORY_UPDATED
+                conditions:
+                  - variable: pushed_at
+                    change-type: INC
+          - path: /repos/{owner}/{repository}/branches
+            variables:
+              branches_count: $.$lenght
+            events:
+              - name: GITHUB_BRANCHES_COUNT_INCREASED
+                conditions:
+                  - variable: branches_count
+                    change-type: INC
+              - name: GITHUB_BRANCHES_COUNT_DECREASED
+                conditions:
+                  - variable: branches_count
+                    change-type: DEC
+
+    - name: StackOverflow Questions
+      link-template: https://stackoverflow.com/questions/{number}/{name}
+      api:
+        host: https://api.stackexchange.com/2.3
+        headers:
+          Authorization: ${STACKOVERFLOW_TOKEN} # TODO
+        query-params:
+          site: stackoverflow
+        paths:
+          - path: /questions/{number}
+            variables:
+              answer_count: $.$first.answer_count
+              last_activity_date: $.$first.last_activity_date
+            events:
+              - name: STACKOVERFLOW_ANSWERS_COUNT_INCREASED
+                conditions:
+                  - variable: answer_count
+                    change-type: INC
+              - name: STACKOVERFLOW_ANSWERS_COUNT_DECREASED
+                conditions:
+                  - variable: answer_count
+                    change-type: DEC
+              - name: STACKOVERFLOW_QUESTION_UPDATED
+                conditions:
+                  - variable: last_activity_date
+                    change-type: INC
