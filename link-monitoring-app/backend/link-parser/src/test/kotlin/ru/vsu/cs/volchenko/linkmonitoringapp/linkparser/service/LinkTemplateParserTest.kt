@@ -10,7 +10,7 @@ class LinkTemplateParserTest {
     val parser = LinkTemplateParser()
 
     @Test
-    fun `happy path`() {
+    fun `happy path github`() {
         val template = LinkTemplate("https://github.com/{owner}/{repository}")
 
         val res = parser.parse(template)
@@ -22,6 +22,32 @@ class LinkTemplateParserTest {
                         "repository" to 1
                 ),
                 res.variablesPlaces
+        )
+        assertEquals(
+                mapOf<String, Int>(),
+                res.pathPartsPlaces
+        )
+    }
+
+    @Test
+    fun `happy path stackoverflow`() {
+        val template = LinkTemplate("https://stackoverflow.com/questions/{number}/{name}")
+
+        val res = parser.parse(template)
+
+        assertEquals("stackoverflow.com", res.host)
+        assertEquals(
+                mapOf(
+                    "number" to 1,
+                    "name" to 2
+                ),
+                res.variablesPlaces
+        )
+        assertEquals(
+                mapOf(
+                    "questions" to 0
+                ),
+                res.pathPartsPlaces
         )
     }
 

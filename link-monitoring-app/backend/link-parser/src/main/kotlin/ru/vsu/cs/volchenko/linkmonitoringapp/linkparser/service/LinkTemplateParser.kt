@@ -44,6 +44,7 @@ class LinkTemplateParser {
         val parts = url.path.splitAsUrl(skip = 1)
 
         return url.host == parsedTemplate.host &&
+                parsedTemplate.variablesPlaces.size + parsedTemplate.pathPartsPlaces.size == parts.size &&
                 parsedTemplate.pathPartsPlaces
                         .all { it.key == parts[it.value] }
     }
@@ -58,7 +59,7 @@ class LinkTemplateParser {
     )
 
     companion object {
-        private const val LINK_TEMPLATE_REGEXP = "https?:\\/\\/([-a-zA-Z0-9:]\\.?)+(\\/(([-a-zA-Z0-9]+)|(\\{[-a-zA-Z0-9]+\\})))*"
+        private const val LINK_TEMPLATE_REGEXP = "(https?:\\/\\/)?([-a-zA-Z0-9:]\\.?)+(\\/(([-a-zA-Z0-9]+)|(\\{[-a-zA-Z0-9]+\\})))*"
     }
 
 }
