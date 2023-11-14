@@ -7,13 +7,13 @@ import org.mockito.Mockito.mock
 import org.mockito.kotlin.whenever
 import ru.vsu.cs.volchenko.linkmonitoringapp.linkparser.configuration.LinkParserConfiguration
 import ru.vsu.cs.volchenko.linkmonitoringapp.linkparser.configuration.property.LinkSourceProperties
-import ru.vsu.cs.volchenko.linkmonitoringapp.linkparser.configuration.property.LinkTemplate
+import ru.vsu.cs.volchenko.linkmonitoringapp.linkparser.model.LinkTemplate
 import ru.vsu.cs.volchenko.linkmonitoringapp.linkparser.service.LinkTemplateParser
 import java.net.URI
 
 class LinkParserTest {
 
-    val templateParser = LinkTemplateParser()
+    val templateParser : LinkTemplateParser = mock()
     val config : LinkParserConfiguration = mock()
 
     val linkParser = LinkParser(config, templateParser)

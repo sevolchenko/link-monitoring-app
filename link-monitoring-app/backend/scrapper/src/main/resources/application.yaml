@@ -4,11 +4,12 @@ link-parser:
       link-template: https://github.com/{owner}/{repository}
       api:
         host: https://api.github.com
-        headers:
-          Authorization: ${GITHUB_TOKEN} # TODO
+        default-params:
+          headers:
+            Authorization: ${GITHUB_TOKEN} # TODO
         paths:
           - path: /repos/{owner}/{repository}
-            variables:
+            body-variables:
               pushed_at: $.pushed_at
             events:
               - name: GITHUB_REPOSITORY_UPDATED
@@ -16,7 +17,7 @@ link-parser:
                   - variable: pushed_at
                     change-type: INC
           - path: /repos/{owner}/{repository}/branches
-            variables:
+            body-variables:
               branches_count: $.$lenght
             events:
               - name: GITHUB_BRANCHES_COUNT_INCREASED
@@ -31,16 +32,18 @@ link-parser:
     - name: StackOverflow Questions
       link-template: https://stackoverflow.com/questions/{number}/{name}
       api:
-        host: https://api.stackexchange.com/2.3
-        headers:
-          Authorization: ${STACKOVERFLOW_TOKEN} # TODO
-        query-params:
-          site: stackoverflow
+        host: https://api.stackexchange.com
+        default-params:
+          path: /2.3
+          headers:
+            Authorization: ${STACKOVERFLOW_TOKEN} # TODO
+          query:
+            site: stackoverflow
         paths:
           - path: /questions/{number}
-            variables:
-              answer_count: $.$first.answer_count
-              last_activity_date: $.$first.last_activity_date
+            body-variables:
+              answer_count: $.$item0.answer_count
+              last_activity_date: $.$item0.last_activity_date
             events:
               - name: STACKOVERFLOW_ANSWERS_COUNT_INCREASED
                 conditions:
