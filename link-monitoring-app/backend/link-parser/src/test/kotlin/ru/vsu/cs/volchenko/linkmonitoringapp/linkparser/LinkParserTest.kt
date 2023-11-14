@@ -28,8 +28,12 @@ class LinkParserTest {
         whenever(secondSource.linkTemplate)
                 .thenReturn(LinkTemplate("https://stackoverflow.com/questions/{number}/{name}"))
 
+        val thirdSource : LinkSourceProperties = mock()
+        whenever(thirdSource.linkTemplate)
+                .thenReturn(LinkTemplate("https://wildberries.ru/catalog/{number}/detail.aspx"))
+
         whenever(config.sources)
-                .thenReturn(listOf(firstSource, secondSource))
+                .thenReturn(listOf(firstSource, secondSource, thirdSource))
     }
 
     @Test
@@ -54,6 +58,18 @@ class LinkParserTest {
                 mapOf(
                         "number" to "44784328",
                         "name" to "how-to-obtain-all-subclasses-of-a-given-sealed-class"
+                ), res
+        )
+    }
+
+    @Test
+    fun `test extractVariables happy path wildberries`() {
+
+        val res = linkParser.extractVariables(URI.create("https://wildberries.ru/catalog/155414203/detail.aspx"))
+
+        assertEquals(
+                mapOf(
+                        "number" to "155414203"
                 ), res
         )
     }

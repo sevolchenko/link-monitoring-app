@@ -14,12 +14,12 @@ class LinkTemplateParser {
                 error("Шаблон из конфигурации $this не совпадает с LINK_TEMPLATE_REGEXP")
 
             // Отсекаем протокол и пустоту между //
-            val parts = splitAsUrl(skip = 2)
+            val parts = splitAsUrl(skip = 2) // TODO case without protocol
 
             val host = parts[0]
 
             // Отсекли хост
-            val variables = parts
+            val variables = parts // TODO case without www.
                     .drop(1)
                     .mapIndexed { index, part -> part to index }
                     .filter { isVariable(it.first) }
@@ -59,7 +59,7 @@ class LinkTemplateParser {
     )
 
     companion object {
-        private const val LINK_TEMPLATE_REGEXP = "(https?:\\/\\/)?([-a-zA-Z0-9:]\\.?)+(\\/(([-a-zA-Z0-9]+)|(\\{[-a-zA-Z0-9]+\\})))*"
+        private const val LINK_TEMPLATE_REGEXP = "(https?:\\/\\/)?([-a-zA-Z0-9:]\\.?)+(\\/(([-.a-zA-Z0-9]+)|(\\{[-a-zA-Z0-9]+\\})))*"
     }
 
 }
