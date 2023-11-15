@@ -3,42 +3,30 @@ package ru.vsu.cs.volchenko.linkmonitoringapp.linkparser
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.Mockito.mock
+import org.mockito.Mockito.`when`
 import org.mockito.kotlin.whenever
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.test.context.junit.jupiter.SpringExtension
+import org.springframework.test.context.junit4.SpringRunner
 import ru.vsu.cs.volchenko.linkmonitoringapp.linkparser.configuration.LinkParserConfiguration
 import ru.vsu.cs.volchenko.linkmonitoringapp.linkparser.configuration.property.LinkSourceProperties
 import ru.vsu.cs.volchenko.linkmonitoringapp.linkparser.model.LinkTemplate
 import ru.vsu.cs.volchenko.linkmonitoringapp.linkparser.service.LinkTemplateParser
+import ru.vsu.cs.volchenko.linkmonitoringapp.linkparser.service.PathTemplateParser
 import java.net.URI
 
+@SpringBootTest(classes = [LinkParser::class, LinkTemplateParser::class, PathTemplateParser::class, LinkParserConfiguration::class ])
+@ExtendWith(SpringExtension::class)
 class LinkParserTest {
 
-    val templateParser : LinkTemplateParser = mock()
-    val config : LinkParserConfiguration = mock()
-
-    val linkParser = LinkParser(config, templateParser)
-
-    @BeforeEach
-    fun setup() {
-        val firstSource : LinkSourceProperties = mock()
-        whenever(firstSource.linkTemplate)
-                .thenReturn(LinkTemplate("https://github.com/{owner}/{repository}"))
-
-        val secondSource : LinkSourceProperties = mock()
-        whenever(secondSource.linkTemplate)
-                .thenReturn(LinkTemplate("https://stackoverflow.com/questions/{number}/{name}"))
-
-        val thirdSource : LinkSourceProperties = mock()
-        whenever(thirdSource.linkTemplate)
-                .thenReturn(LinkTemplate("https://wildberries.ru/catalog/{number}/detail.aspx"))
-
-        whenever(config.sources)
-                .thenReturn(listOf(firstSource, secondSource, thirdSource))
-    }
+    @Autowired
+    lateinit var linkParser: LinkParser
 
     @Test
     fun `test extractVariables happy path github`() {
-
         val res = linkParser.extractVariables(URI.create("https://github.com/owner/repository"))
 
         assertEquals(
