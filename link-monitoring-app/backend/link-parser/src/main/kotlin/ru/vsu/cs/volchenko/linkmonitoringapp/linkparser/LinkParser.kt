@@ -8,17 +8,15 @@ import java.net.URI
 
 @Component
 class LinkParser(
-        val config: LinkParserConfiguration,
-        val parser: LinkTemplateParser
+        config: LinkParserConfiguration,
+        private val parser: LinkTemplateParser
 ) {
 
-    fun parse(url: URI) {
-
-    }
+    private val parsedLinkTemplates = config.sources
+            .map { parser.parse(it.linkTemplate) }
 
     fun extractVariables(url: URI) : Map<String, String>{
-        val parseResult = config.sources
-                .map { parser.parse(it.linkTemplate) }
+        val parseResult = parsedLinkTemplates
                 .firstOrNull { parser.urlMatches(url, it) } ?: error("Ссылка $url не совпадает ни с одним шаблоном")
 
         val urlParts = url.path.splitAsPath()
