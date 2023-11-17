@@ -1,14 +1,20 @@
-link-parser:
+scrapper:
+
+  scheduler:
+    interval: PT10S
+
+  link-check-delay: PT1M
+
   sources:
     - name: GitHub Repositories
       link-template: https://github.com/{owner}/{repository}
       api:
-        host: https://api.github.com
+        host: https://api.github.com/repos
         default-params:
           headers:
             Authorization: ${GITHUB_TOKEN} # TODO
         paths:
-          - path: /repos/{owner}/{repository}
+          - path: /{owner}/{repository}
             body-variables:
               pushed_at: $.pushed_at
             events:
@@ -16,7 +22,7 @@ link-parser:
                 conditions:
                   - variable: pushed_at
                     change-type: INC
-          - path: /repos/{owner}/{repository}/branches
+          - path: /{owner}/{repository}/branches
             body-variables:
               branches_count: $.$lenght
             events:
@@ -32,15 +38,15 @@ link-parser:
     - name: StackOverflow Questions
       link-template: https://stackoverflow.com/questions/{number}/{name}
       api:
-        host: https://api.stackexchange.com
+        host: https://api.stackexchange.com/2.3
         default-params:
-          path: /2.3
+          path: /questions
           headers:
             Authorization: ${STACKOVERFLOW_TOKEN} # TODO
           query:
             site: stackoverflow
         paths:
-          - path: /questions/{number}
+          - path: /{number}
             body-variables:
               answer_count: $.$item0.answer_count
               last_activity_date: $.$item0.last_activity_date

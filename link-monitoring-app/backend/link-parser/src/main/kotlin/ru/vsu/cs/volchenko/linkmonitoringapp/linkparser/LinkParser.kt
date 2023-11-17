@@ -1,7 +1,7 @@
 package ru.vsu.cs.volchenko.linkmonitoringapp.linkparser
 
 import org.springframework.stereotype.Component
-import ru.vsu.cs.volchenko.linkmonitoringapp.linkparser.configuration.LinkParserConfiguration
+import ru.vsu.cs.volchenko.linkmonitoringapp.linkparser.configuration.RequiredLinkParserConfiguration
 import ru.vsu.cs.volchenko.linkmonitoringapp.linkparser.extension.splitAsPath
 import ru.vsu.cs.volchenko.linkmonitoringapp.linkparser.extension.withoutWww
 import ru.vsu.cs.volchenko.linkmonitoringapp.linkparser.service.LinkTemplateParser
@@ -9,12 +9,12 @@ import java.net.URI
 
 @Component
 class LinkParser(
-        private val config: LinkParserConfiguration,
-        private val parser: LinkTemplateParser
+        private val linkTemplateParser: LinkTemplateParser,
+        private val config: RequiredLinkParserConfiguration
 ) {
 
-    private val parsedLinkTemplates = config.sources
-            .map { parser.parse(it.linkTemplate) }
+    private val parsedLinkTemplates = config.linkTemplates()
+            .map { linkTemplateParser.parse(it) }
 
     fun extractVariables(url: URI) : Map<String, String>{
         val parseResult = parsedLinkTemplates
@@ -26,7 +26,7 @@ class LinkParser(
                 .mapValues { urlParts[it.value] }
     }
 
-    fun URI.matches(template: LinkTemplateParser.LinkTemplateParseResult) : Boolean {
+    private fun URI.matches(template: LinkTemplateParser.LinkTemplateParseResult) : Boolean {
         val parts = path.splitAsPath()
 
         return host.withoutWww() == template.host &&
