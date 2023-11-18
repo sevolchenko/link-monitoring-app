@@ -3,6 +3,7 @@ package ru.vsu.cs.volchenko.linkmonitoringapp.linkparser.extension
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
+import ru.vsu.cs.volchenko.linkmonitoringapp.linkparser.util.splitAsUrl
 
 class LinkExtensionTest {
 

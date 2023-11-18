@@ -30,6 +30,7 @@ dependencies{
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
     implementation("org.springframework.kafka:spring-kafka")
     implementation(project(mapOf("path" to ":link-parser")))
+    implementation(project(mapOf("path" to ":field-extractor")))
     developmentOnly("org.springframework.boot:spring-boot-devtools")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("io.projectreactor:reactor-test")

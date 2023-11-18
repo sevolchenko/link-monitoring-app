@@ -2,9 +2,9 @@ package ru.vsu.cs.volchenko.linkmonitoringapp.linkparser
 
 import org.springframework.stereotype.Component
 import ru.vsu.cs.volchenko.linkmonitoringapp.linkparser.configuration.RequiredLinkParserConfiguration
-import ru.vsu.cs.volchenko.linkmonitoringapp.linkparser.extension.splitAsPath
-import ru.vsu.cs.volchenko.linkmonitoringapp.linkparser.extension.withoutWww
 import ru.vsu.cs.volchenko.linkmonitoringapp.linkparser.service.LinkTemplateParser
+import ru.vsu.cs.volchenko.linkmonitoringapp.linkparser.util.splitAsPath
+import ru.vsu.cs.volchenko.linkmonitoringapp.linkparser.util.withoutWww
 import java.net.URI
 
 @Component

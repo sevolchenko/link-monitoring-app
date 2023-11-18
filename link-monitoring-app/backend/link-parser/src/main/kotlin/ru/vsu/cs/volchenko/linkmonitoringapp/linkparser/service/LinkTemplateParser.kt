@@ -1,13 +1,10 @@
 package ru.vsu.cs.volchenko.linkmonitoringapp.linkparser.service
 
 import org.springframework.stereotype.Component
-import ru.vsu.cs.volchenko.linkmonitoringapp.linkparser.extension.splitAsPath
-import ru.vsu.cs.volchenko.linkmonitoringapp.linkparser.extension.splitAsUrl
-import ru.vsu.cs.volchenko.linkmonitoringapp.linkparser.extension.withoutWww
 import ru.vsu.cs.volchenko.linkmonitoringapp.linkparser.model.LinkTemplate
 import ru.vsu.cs.volchenko.linkmonitoringapp.linkparser.model.PathTemplate
 import ru.vsu.cs.volchenko.linkmonitoringapp.linkparser.service.PathTemplateParser.PathTemplateParseResult
-import java.net.URI
+import ru.vsu.cs.volchenko.linkmonitoringapp.linkparser.util.splitAsUrl
 
 @Component
 class LinkTemplateParser(

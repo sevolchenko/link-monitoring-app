@@ -2,8 +2,8 @@ package ru.vsu.cs.volchenko.linkmonitoringapp.linkparser.service
 
 import jakarta.validation.Valid
 import org.springframework.stereotype.Component
-import ru.vsu.cs.volchenko.linkmonitoringapp.linkparser.extension.splitAsPath
 import ru.vsu.cs.volchenko.linkmonitoringapp.linkparser.model.PathTemplate
+import ru.vsu.cs.volchenko.linkmonitoringapp.linkparser.util.splitAsPath
 
 @Component
 class PathTemplateParser {

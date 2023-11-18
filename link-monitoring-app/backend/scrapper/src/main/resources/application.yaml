@@ -48,8 +48,8 @@ scrapper:
         paths:
           - path: /{number}
             body-variables:
-              answer_count: $.$item0.answer_count
-              last_activity_date: $.$item0.last_activity_date
+              answer_count: $.items.$item0.answer_count
+              last_activity_date: $.items.$item0.last_activity_date
             events:
               - name: STACKOVERFLOW_ANSWERS_COUNT_INCREASED
                 conditions:

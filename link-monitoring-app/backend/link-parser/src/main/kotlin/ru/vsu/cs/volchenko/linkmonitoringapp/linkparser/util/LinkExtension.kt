@@ -1,6 +1,5 @@
-package ru.vsu.cs.volchenko.linkmonitoringapp.linkparser.extension
+package ru.vsu.cs.volchenko.linkmonitoringapp.linkparser.util
 
-import ru.vsu.cs.volchenko.linkmonitoringapp.linkparser.util.PROTOCOL_REGEX
 fun String.splitAsUrl(
 ): Pair<String, String> = withoutProtocol()
                 .withoutWww()
