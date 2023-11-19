@@ -1,26 +1,21 @@
 package ru.vsu.cs.volchenko.linkmonitoringapp.fieldextractor.service
 
-import com.fasterxml.jackson.core.JsonParser
 import com.fasterxml.jackson.databind.DatabindException
-import com.fasterxml.jackson.databind.ObjectMapper
-import ru.vsu.cs.volchenko.linkmonitoringapp.fieldextractor.util.toJsonObject
+import com.fasterxml.jackson.databind.JsonNode
 
 abstract class AbstractExpressionParserStep {
 
-    val objectMapper = ObjectMapper()
-            .disable(JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES)
-
     var next: AbstractExpressionParserStep? = null
 
-    fun tryExtract(expr: String) : String {
+    fun tryExtract(tree: JsonNode) : JsonNode {
         return try {
-            val extracted = extract(expr.toJsonObject())
+            val extracted = extract(tree)
             next?.tryExtract(extracted) ?: extracted
         } catch (ex: DatabindException) {
-            error("Неверный парсинг")
+            error("Ошибка парсинга: ${ex.message}")
         }
     }
 
-    protected abstract fun extract(expr: String) : String
+    protected abstract fun extract(tree: JsonNode) : JsonNode
 
 }

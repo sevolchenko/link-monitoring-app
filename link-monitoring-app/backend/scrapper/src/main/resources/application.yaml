@@ -63,3 +63,7 @@ scrapper:
                 conditions:
                   - variable: last_activity_date
                     change-type: INC
+
+spring:
+  application:
+    name: scrapper

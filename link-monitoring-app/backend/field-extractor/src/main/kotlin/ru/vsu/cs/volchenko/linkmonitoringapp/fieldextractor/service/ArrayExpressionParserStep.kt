@@ -1,36 +1,49 @@
 package ru.vsu.cs.volchenko.linkmonitoringapp.fieldextractor.service
 
-import ru.vsu.cs.volchenko.linkmonitoringapp.fieldextractor.util.ARRAY_NAME
-import ru.vsu.cs.volchenko.linkmonitoringapp.fieldextractor.util.MODIFIER_TOKEN
-import ru.vsu.cs.volchenko.linkmonitoringapp.fieldextractor.util.asJsonArray
+import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.databind.node.ArrayNode
+import com.fasterxml.jackson.databind.node.IntNode
+import ru.vsu.cs.volchenko.linkmonitoringapp.fieldextractor.util.ARRAY_MODIFIER_TOKEN
 
 class ArrayExpressionParserStep(
         private val operation: String
 ) : AbstractExpressionParserStep() {
 
-    override fun extract(expr: String): String {
-        // Убирает кавычки у обьектов внутри массива, хз как фиксить мб через JsonNode
-        val array = objectMapper.readValue(expr.asJsonArray(), Map::class.java)[ARRAY_NAME] as List<*>
+    override fun extract(tree: JsonNode): JsonNode {
+        if (tree !is ArrayNode) error("Ожидается массив")
 
-        return when {
-            operation.startsWith(ITEM) -> {
-                val index = operation.removePrefix(ITEM).toInt()
-
-                array[index]
-            }
-            operation == LENGTH -> {
-                array.size
-            }
-            else -> {
-                error("Неподдерживаемая модификация массива, возможные значения: $ITEM, $LENGTH")
-            }
-        }.toString()
+        return PermittedArrayOperation.values()
+            .firstOrNull { it.condition(operation) }
+            ?.action?.invoke(operation, tree)
+            ?: error(
+                "Неподдерживаемая модификация массива, возможные значения: ${
+                    PermittedArrayOperation.values().joinToString { it.example }
+                }"
+            )
     }
 
-    companion object {
+    private enum class PermittedArrayOperation(
+        val example: String,
+        val condition: (operation: String) -> Boolean,
+        val action: (operation: String, tree: ArrayNode) -> JsonNode
+    ) {
 
-        const val ITEM = "${MODIFIER_TOKEN}item"
-        const val LENGTH = "${MODIFIER_TOKEN}lenght"
+        GET_ITEM_OPERATION(
+            "${ARRAY_MODIFIER_TOKEN}item",
+            { operation: String -> operation.startsWith(GET_ITEM_OPERATION.example) },
+            { operation: String, tree: JsonNode ->
+                val index = operation.removePrefix(GET_ITEM_OPERATION.example).toInt()
+                tree[index]
+            }
+        ),
+
+        LENGTH_OPERATION(
+            "${ARRAY_MODIFIER_TOKEN}lenght",
+            { operation: String -> operation == LENGTH_OPERATION.example },
+            { _: String, tree: JsonNode ->
+                IntNode(tree.size())
+            }
+        )
 
     }
 
