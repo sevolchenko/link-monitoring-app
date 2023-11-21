@@ -65,5 +65,14 @@ scrapper:
                     change-type: INC
 
 spring:
+
   application:
     name: scrapper
+
+  liquibase:
+    driver-class-name: org.postgresql.Driver
+    change-log: migrations/master.xml
+
+springdoc:
+  swagger-ui:
+    path: '/swagger-ui'

@@ -7,7 +7,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.ComponentScan
 import ru.vsu.cs.volchenko.linkmonitoringapp.scrapper.configuration.ScrapperConfiguration
 
-@SpringBootApplication(exclude = [DataSourceAutoConfiguration::class])
+@SpringBootApplication
 @EnableConfigurationProperties(ScrapperConfiguration::class)
 @ComponentScan(basePackages = ["ru.vsu.cs.volchenko.linkmonitoringapp"])
 class ScrapperApplication

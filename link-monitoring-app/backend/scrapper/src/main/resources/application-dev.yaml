@@ -1,0 +1,9 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5433/scrapper
+    username: postgres
+    password: postgres
+
+server:
+  port:
+    8081

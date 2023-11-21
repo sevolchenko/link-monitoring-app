@@ -204,6 +204,8 @@ empty-blocks:
     allowedExceptionNameRegex: '_|(ignore|expected).*'
   EmptyClassBlock:
     active: true
+    excludes:
+      - '**/entity/**'
   EmptyDefaultConstructor:
     active: true
   EmptyDoWhileBlock:
