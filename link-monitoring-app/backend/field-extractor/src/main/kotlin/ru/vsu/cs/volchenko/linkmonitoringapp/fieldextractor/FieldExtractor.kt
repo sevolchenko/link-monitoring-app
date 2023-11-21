@@ -21,6 +21,8 @@ class FieldExtractor(
 
             currentStep.next = next
             currentStep = next
+
+                    // TODO scoped extensions
         }
 
         return firstStep.tryExtract(objectMapper.readTree(json)).asText()

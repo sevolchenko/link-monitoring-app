@@ -8,10 +8,10 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 
 @Configuration
-class ObjectMapperConfiguration {
+open class ObjectMapperConfiguration {
 
     @Bean
-    fun objectMapper() : ObjectMapper {
+    open fun objectMapper() : ObjectMapper {
         return ObjectMapper()
             .registerModules(
                 KotlinModule.Builder()

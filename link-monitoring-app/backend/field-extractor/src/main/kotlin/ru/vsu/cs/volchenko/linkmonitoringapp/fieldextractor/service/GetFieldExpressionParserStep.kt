@@ -7,7 +7,7 @@ class GetFieldExpressionParserStep(
 ) : AbstractExpressionParserStep() {
 
     override fun extract(tree: JsonNode): JsonNode {
-        return tree[field] ?: error("Пришел null")
+        return tree[field] ?: error("Пришел null либо такого поля не существует")
     }
 
 }

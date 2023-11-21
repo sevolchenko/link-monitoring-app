@@ -7,7 +7,7 @@ import ru.vsu.cs.volchenko.linkmonitoringapp.linkparser.model.LinkTemplate
 
 @Configuration
 class LinkParserConfiguration(
-        val config: ScrapperConfiguration
+    private val config: ScrapperConfiguration
 ) : RequiredLinkParserConfiguration {
 
     @Bean

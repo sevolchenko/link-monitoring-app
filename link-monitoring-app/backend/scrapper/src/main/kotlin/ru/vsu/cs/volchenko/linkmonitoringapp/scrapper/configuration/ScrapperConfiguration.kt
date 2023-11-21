@@ -12,7 +12,7 @@ import java.time.Duration
 @Validated
 @EnableScheduling
 @ConfigurationProperties(prefix = "scrapper")
-class ScrapperConfiguration(
+open class ScrapperConfiguration(
         val scheduler: SchedulerProperties,
         val linkCheckDelay: Duration,
         @field:Valid
