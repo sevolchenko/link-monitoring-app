@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.node.IntNode
 import ru.vsu.cs.volchenko.linkmonitoringapp.fieldextractor.util.ARRAY_MODIFIER_TOKEN
 
 class ArrayExpressionParserStep(
-        private val operation: String
+    private val operation: String
 ) : AbstractExpressionParserStep() {
 
     override fun extract(tree: JsonNode): JsonNode {
@@ -44,7 +44,5 @@ class ArrayExpressionParserStep(
                 IntNode(tree.size())
             }
         )
-
     }
-
 }

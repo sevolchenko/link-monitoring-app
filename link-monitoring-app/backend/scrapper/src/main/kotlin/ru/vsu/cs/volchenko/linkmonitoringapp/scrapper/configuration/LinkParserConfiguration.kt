@@ -15,6 +15,4 @@ class LinkParserConfiguration(
         return config.sources.map { it.linkTemplate }
     }
 
-
-
 }

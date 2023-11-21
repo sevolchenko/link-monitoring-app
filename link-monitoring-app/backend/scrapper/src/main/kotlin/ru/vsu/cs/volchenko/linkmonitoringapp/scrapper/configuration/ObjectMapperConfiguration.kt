@@ -8,14 +8,13 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 
 @Configuration
-open class ObjectMapperConfiguration {
+class ObjectMapperConfiguration {
 
     @Bean
-    open fun objectMapper() : ObjectMapper {
+    fun objectMapper() : ObjectMapper {
         return ObjectMapper()
             .registerModules(
                 KotlinModule.Builder()
-                    .withReflectionCacheSize(512)
                     .configure(KotlinFeature.NullToEmptyCollection, false)
                     .configure(KotlinFeature.NullToEmptyMap, false)
                     .configure(KotlinFeature.NullIsSameAsDefault, false)

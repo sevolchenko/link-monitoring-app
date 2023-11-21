@@ -13,6 +13,5 @@ import ru.vsu.cs.volchenko.linkmonitoringapp.scrapper.configuration.ScrapperConf
 class ScrapperApplication
 
 fun main(args: Array<String>) {
-    val ctx = SpringApplication.run(ScrapperApplication::class.java, *args)
-    println()
+    SpringApplication.run(ScrapperApplication::class.java, *args)
 }

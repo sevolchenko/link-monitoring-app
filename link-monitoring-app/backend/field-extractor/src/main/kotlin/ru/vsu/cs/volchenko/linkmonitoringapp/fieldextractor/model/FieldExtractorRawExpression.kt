@@ -6,5 +6,4 @@ import ru.vsu.cs.volchenko.linkmonitoringapp.fieldextractor.util.EXPRESSION_REGE
 class FieldExtractorRawExpression(
     @field:Pattern(regexp = EXPRESSION_REGEX)
     val expression: String
-) {
-}
+)

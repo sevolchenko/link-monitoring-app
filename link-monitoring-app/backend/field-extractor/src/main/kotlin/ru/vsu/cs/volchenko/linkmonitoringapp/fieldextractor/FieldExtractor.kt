@@ -3,7 +3,10 @@ package ru.vsu.cs.volchenko.linkmonitoringapp.fieldextractor
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.stereotype.Component
 import ru.vsu.cs.volchenko.linkmonitoringapp.fieldextractor.model.FieldExtractorRawExpression
-import ru.vsu.cs.volchenko.linkmonitoringapp.fieldextractor.service.*
+import ru.vsu.cs.volchenko.linkmonitoringapp.fieldextractor.service.AbstractExpressionParserStep
+import ru.vsu.cs.volchenko.linkmonitoringapp.fieldextractor.service.ArrayExpressionParserStep
+import ru.vsu.cs.volchenko.linkmonitoringapp.fieldextractor.service.FirstExpressionParserStep
+import ru.vsu.cs.volchenko.linkmonitoringapp.fieldextractor.service.GetFieldExpressionParserStep
 import ru.vsu.cs.volchenko.linkmonitoringapp.fieldextractor.util.ARRAY_MODIFIER_TOKEN
 
 @Component
@@ -12,7 +15,6 @@ class FieldExtractor(
 ) {
 
     fun extract(raw: FieldExtractorRawExpression, json: String): String {
-
         val firstStep = FirstExpressionParserStep()
         var currentStep: AbstractExpressionParserStep = firstStep
 
@@ -22,7 +24,7 @@ class FieldExtractor(
             currentStep.next = next
             currentStep = next
 
-                    // TODO scoped extensions
+            // TODO scoped extensions
         }
 
         return firstStep.tryExtract(objectMapper.readTree(json)).asText()

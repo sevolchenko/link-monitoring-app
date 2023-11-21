@@ -7,7 +7,7 @@ abstract class AbstractExpressionParserStep {
 
     var next: AbstractExpressionParserStep? = null
 
-    fun tryExtract(tree: JsonNode) : JsonNode {
+    fun tryExtract(tree: JsonNode): JsonNode {
         return try {
             val extracted = extract(tree)
             next?.tryExtract(extracted) ?: extracted
@@ -16,6 +16,5 @@ abstract class AbstractExpressionParserStep {
         }
     }
 
-    protected abstract fun extract(tree: JsonNode) : JsonNode
-
+    protected abstract fun extract(tree: JsonNode): JsonNode
 }

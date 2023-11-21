@@ -7,5 +7,4 @@ class FirstExpressionParserStep : AbstractExpressionParserStep() {
     override fun extract(tree: JsonNode): JsonNode {
         return tree
     }
-
 }
