@@ -1,6 +1,7 @@
 package ru.vsu.cs.volchenko.linkmonitoringapp.fieldextractor
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.databind.node.ObjectNode
 import com.fasterxml.jackson.module.kotlin.KotlinFeature
 import com.fasterxml.jackson.module.kotlin.KotlinModule
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -21,19 +22,17 @@ class FieldExtractorTest {
                 .build()
         )
 
-    val fieldExtractor = FieldExtractor(objectMapper)
+    val fieldExtractor = FieldExtractor()
 
     @Test
     fun `happy path getfield`() {
         val expr = "$.digit"
-        val json = objectMapper.writeValueAsString(
-            object {
-                val digit = 5
-                val string = "test"
-            }
-        )
+        val obj = object {
+            val digit = 5
+            val string = "test"
+        }
 
-        val res = fieldExtractor.extract(FieldExtractorRawExpression(expr), json)
+        val res = fieldExtractor.extract(FieldExtractorRawExpression(expr), objectMapper.valueToTree(obj))
 
         assertEquals("5", res)
     }
@@ -41,13 +40,12 @@ class FieldExtractorTest {
     @Test
     fun `happy path array item`() {
         val expr = "$.items.\$item1"
-        val json = objectMapper.writeValueAsString(
-            object {
+        val obj = object {
                 val items = listOf("first", "second", "third")
             }
-        )
 
-        val res = fieldExtractor.extract(FieldExtractorRawExpression(expr), json)
+
+        val res = fieldExtractor.extract(FieldExtractorRawExpression(expr), objectMapper.valueToTree(obj))
 
         assertEquals("second", res)
     }
@@ -55,13 +53,12 @@ class FieldExtractorTest {
     @Test
     fun `happy path array lenght`() {
         val expr = "$.items.\$lenght"
-        val json = objectMapper.writeValueAsString(
-            object {
+        val obj = object {
                 val items = listOf("first", "second", "third")
             }
-        )
 
-        val res = fieldExtractor.extract(FieldExtractorRawExpression(expr), json)
+
+        val res = fieldExtractor.extract(FieldExtractorRawExpression(expr), objectMapper.valueToTree(obj))
 
         assertEquals("3", res)
     }
@@ -71,7 +68,7 @@ class FieldExtractorTest {
         val expr = "$.items.\$item1.prefix"
         val json = "{\"items\":[{\"value\":0,\"prefix\":\"pre0\"},{\"value\":1,\"prefix\":\"pre1\"},{\"value\":2,\"prefix\":\"pre2\"}]}"
 
-        val res = fieldExtractor.extract(FieldExtractorRawExpression(expr), json)
+        val res = fieldExtractor.extract(FieldExtractorRawExpression(expr), objectMapper.readTree(json))
 
         assertEquals("pre1", res)
     }

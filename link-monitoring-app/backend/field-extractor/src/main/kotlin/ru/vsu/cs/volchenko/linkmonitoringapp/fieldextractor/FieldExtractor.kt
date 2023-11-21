@@ -1,5 +1,6 @@
 package ru.vsu.cs.volchenko.linkmonitoringapp.fieldextractor
 
+import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.stereotype.Component
 import ru.vsu.cs.volchenko.linkmonitoringapp.fieldextractor.model.FieldExtractorRawExpression
@@ -10,24 +11,19 @@ import ru.vsu.cs.volchenko.linkmonitoringapp.fieldextractor.service.GetFieldExpr
 import ru.vsu.cs.volchenko.linkmonitoringapp.fieldextractor.util.ARRAY_MODIFIER_TOKEN
 
 @Component
-class FieldExtractor(
-    val objectMapper: ObjectMapper
-) {
+class FieldExtractor {
 
-    fun extract(raw: FieldExtractorRawExpression, json: String): String {
+    fun extract(raw: FieldExtractorRawExpression, tree: JsonNode): String {
         val firstStep = FirstExpressionParserStep()
         var currentStep: AbstractExpressionParserStep = firstStep
 
         raw.expression.split(".").drop(1).forEach {
-            val next = resolveStep(it)
-
-            currentStep.next = next
-            currentStep = next
-
-            // TODO scoped extensions
+            currentStep = resolveStep(it).also {
+                nextStep -> currentStep.next = nextStep
+            }
         }
 
-        return firstStep.tryExtract(objectMapper.readTree(json)).asText()
+        return firstStep.tryExtract(tree).asText()
     }
 
     private fun resolveStep(step: String): AbstractExpressionParserStep {
