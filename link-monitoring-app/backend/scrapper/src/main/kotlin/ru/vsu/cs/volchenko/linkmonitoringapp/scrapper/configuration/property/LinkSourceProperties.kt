@@ -11,4 +11,6 @@ data class LinkSourceProperties(
     val linkTemplate: LinkTemplate,
         @field:Valid
     val api: ApiProperties,
+        @field:Valid
+    val paths: List<PathProperties>
 )

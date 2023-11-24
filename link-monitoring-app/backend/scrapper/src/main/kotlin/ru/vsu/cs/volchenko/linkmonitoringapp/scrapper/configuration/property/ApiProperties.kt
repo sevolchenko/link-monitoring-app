@@ -9,6 +9,4 @@ data class ApiProperties(
     val host: URI,
     @field:Valid
     val defaultParams: DefaultApiParamsProperties = DefaultApiParamsProperties(),
-    @field:Valid
-    val paths: List<PathProperties>
 )

@@ -7,8 +7,8 @@ import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import jakarta.persistence.Table
-import java.time.Instant
-import java.time.LocalDateTime
+import java.net.URI
+import java.time.OffsetDateTime
 
 @Entity
 @Table(name = "link")
@@ -16,17 +16,17 @@ class Link (
     @field:Id
     @field:GeneratedValue(strategy = GenerationType.IDENTITY)
     @field:Column(name = "link_id")
-    private val linkId: Long,
+    var linkId: Long,
 
     @field:Column(name = "url", unique = true)
-    private val url: String,
+    var url: URI,
 
     @field:Column(name = "state", columnDefinition = "json")
-    private val state: JsonNode,
+    var state: JsonNode,
 
     @Column(name = "last_scanned_at")
-    private val lastScannedAt: LocalDateTime,
+    var lastScannedAt: OffsetDateTime,
 
     @Column(name = "created_at")
-    private val createdAt: LocalDateTime = LocalDateTime.now()
+    var createdAt: OffsetDateTime = OffsetDateTime.now()
 )

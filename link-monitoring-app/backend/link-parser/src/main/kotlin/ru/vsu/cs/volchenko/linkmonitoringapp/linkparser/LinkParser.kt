@@ -16,7 +16,7 @@ class LinkParser(
     private val parsedLinkTemplates = config.linkTemplates()
             .map { linkTemplateParser.parse(it) }
 
-    fun extractVariables(url: URI) : Map<String, String>{
+    fun extractPathParameters(url: URI) : Map<String, String>{
         val parseResult = parsedLinkTemplates
                 .firstOrNull { url.matches(it) } ?: error("Ссылка $url не совпадает ни с одним шаблоном")
 
