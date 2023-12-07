@@ -41,6 +41,7 @@ class ArrayExpressionParserStep(
             "${ARRAY_MODIFIER_TOKEN}lenght",
             { operation: String -> operation == LENGTH_OPERATION.example },
             { _: String, tree: JsonNode ->
+                // TODO мб дать имя?
                 IntNode(tree.size())
             }
         )
