@@ -9,6 +9,7 @@ plugins {
 dependencies{
 
     val springdocVersion: String by project
+    val mapstructVersion: String by project
 
     implementation(project(mapOf("path" to ":link-parser")))
     implementation(project(mapOf("path" to ":field-extractor")))
@@ -23,8 +24,14 @@ dependencies{
 
     implementation("org.springframework.kafka:spring-kafka")
 
+    implementation("org.mapstruct:mapstruct:$mapstructVersion")
+
     testImplementation("io.projectreactor:reactor-test")
     testImplementation("org.springframework.kafka:spring-kafka-test")
+}
+
+tasks.withType<JavaCompile> {
+    options.compilerArgs = listOf("-Amapstruct.defaultComponentModel=spring")
 }
 
 springBoot {

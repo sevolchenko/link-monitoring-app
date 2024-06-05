@@ -1,9 +1,40 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5433/scrapper
+    url: jpa:postgresql://localhost:5433/scrapper
     username: postgres
     password: postgres
 
 server:
   port:
     8081
+
+scrapper:
+  sources:
+    - name: LocalHost
+      link-template: http://localhost:8090/{id}
+      api:
+        host: http://localhost:8090/
+        default-params:
+          path: /questions
+          headers:
+            Authorization: ${STACKOVERFLOW_TOKEN} # TODO
+          query:
+            site: stackoverflow
+      paths:
+        - path: /{number}
+          body-variables:
+            answer_count: $.items.$item0.answer_count
+            last_activity_date: $.items.$item0.last_activity_date
+          events:
+            - name: STACKOVERFLOW_ANSWERS_COUNT_INCREASED
+              conditions:
+                - variable: answer_count
+                  change-type: INC
+            - name: STACKOVERFLOW_ANSWERS_COUNT_DECREASED
+              conditions:
+                - variable: answer_count
+                  change-type: DEC
+            - name: STACKOVERFLOW_QUESTION_UPDATED
+              conditions:
+                - variable: last_activity_date
+                  change-type: INC

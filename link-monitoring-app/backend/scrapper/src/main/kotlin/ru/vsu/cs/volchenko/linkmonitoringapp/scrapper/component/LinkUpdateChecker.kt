@@ -11,9 +11,7 @@ import ru.vsu.cs.volchenko.linkmonitoringapp.scrapper.configuration.property.Eve
 import ru.vsu.cs.volchenko.linkmonitoringapp.scrapper.configuration.property.EventConditionProperties.EventChangeType.INC
 import ru.vsu.cs.volchenko.linkmonitoringapp.scrapper.configuration.property.PathEventProperties
 import ru.vsu.cs.volchenko.linkmonitoringapp.scrapper.dispatcher.KafkaEventsProducer
-import ru.vsu.cs.volchenko.linkmonitoringapp.scrapper.link.dao.LinkDao
-import ru.vsu.cs.volchenko.linkmonitoringapp.scrapper.link.dao.entity.Link
-import java.net.URI
+import ru.vsu.cs.volchenko.linkmonitoringapp.scrapper.link.adapter.jpa.LinkDao
 import java.time.OffsetDateTime.now
 
 @Component
@@ -43,31 +41,25 @@ class LinkUpdateChecker(
 
             linkSource.paths.forEach { pathTemplate ->
 
-                val apiState = webClient
+                val response = webClient
                     .get()
-                    .uri {
-                        // TODO: build correct webclient
-                        pathParameters
-                        URI.create("")
-                    }
+                    .uri(pathTemplate.path.path, pathParameters)
                     .retrieve()
                     .bodyToMono(JsonNode::class.java)
-                    .block() // TODO block or subscribe ASYNC maybe
+                    .block()
                     ?: error("С вызова ${linkSource.api.host}${pathTemplate.path} получен null")
 
-                // TODO unpack vars via fieldExtractor
-                val apiVariables = emptyMap<String, String>()
+                val apiState = fieldExtractor.extract(pathTemplate.bodyVariables, response)
 
                 val currentState = link.state.fields().asSequence().associate { it.key to it.value.asText() }
 
                 pathTemplate.events.forEach { event ->
 
-                    if (event.happened(currentState, apiVariables)) {
+                    if (event.happened(currentState, apiState)) {
 
                         log.info("По ссылке ${link.url} произошло событие ${event.name}")
 
                         kafkaEventsProducer.sendEvent(event.name)
-
                     }
 
                 }

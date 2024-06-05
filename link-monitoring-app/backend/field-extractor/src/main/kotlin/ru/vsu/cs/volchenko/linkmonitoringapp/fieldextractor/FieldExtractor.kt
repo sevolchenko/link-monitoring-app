@@ -13,17 +13,21 @@ import ru.vsu.cs.volchenko.linkmonitoringapp.fieldextractor.util.ARRAY_MODIFIER_
 @Component
 class FieldExtractor {
 
-    fun extract(raw: FieldExtractorRawExpression, tree: JsonNode): String {
+    fun extract(variables: Map<String, FieldExtractorRawExpression>, tree: JsonNode): Map<String, String> {
+
         val firstStep = FirstExpressionParserStep()
         var currentStep: AbstractExpressionParserStep = firstStep
 
-        raw.expression.split(".").drop(1).forEach {
-            currentStep = resolveStep(it).also {
-                nextStep -> currentStep.next = nextStep
-            }
-        }
+        return variables.mapValues { variable ->
 
-        return firstStep.tryExtract(tree).asText()
+            variable.value.expression.split(".").drop(1).forEach {
+                currentStep = resolveStep(it).also {
+                    nextStep -> currentStep.next = nextStep
+                }
+            }
+
+            firstStep.tryExtract(tree).asText()
+        }
     }
 
     private fun resolveStep(step: String): AbstractExpressionParserStep {

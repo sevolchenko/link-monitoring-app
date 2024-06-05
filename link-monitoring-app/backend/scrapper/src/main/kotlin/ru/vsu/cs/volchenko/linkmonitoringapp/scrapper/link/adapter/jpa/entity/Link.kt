@@ -1,4 +1,4 @@
-package ru.vsu.cs.volchenko.linkmonitoringapp.scrapper.link.dao.entity
+package ru.vsu.cs.volchenko.linkmonitoringapp.scrapper.link.adapter.jpa.entity
 
 import com.fasterxml.jackson.databind.JsonNode
 import jakarta.persistence.Column
@@ -24,9 +24,9 @@ class Link (
     @field:Column(name = "state", columnDefinition = "json")
     var state: JsonNode,
 
-    @Column(name = "last_scanned_at")
+    @field:Column(name = "last_scanned_at")
     var lastScannedAt: OffsetDateTime,
 
-    @Column(name = "created_at")
+    @field:Column(name = "created_at")
     var createdAt: OffsetDateTime = OffsetDateTime.now()
 )
